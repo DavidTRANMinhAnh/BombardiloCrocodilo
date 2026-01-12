@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://choeruwxfrbf4"]
+
+[ext_resource type="Script" uid="uid://bva0qvims3ps4" path="res://bomb.gd" id="1_573fp"]
+[ext_resource type="PackedScene" uid="uid://bytyblppch5mk" path="res://explosion.tscn" id="2_4fn8o"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j810f"]
+albedo_color = Color(0.5904814, 0.4044776, 0.13270754, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_j810f"]
+material = SubResource("StandardMaterial3D_j810f")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_573fp"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Bomb" type="StaticBody3D" parent="."]
+script = ExtResource("1_573fp")
+explosion_scene = ExtResource("2_4fn8o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bomb"]
+mesh = SubResource("SphereMesh_j810f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Bomb"]
+shape = SubResource("SphereShape3D_573fp")
+
+[node name="ExplosionTimer" type="Timer" parent="Bomb"]
+one_shot = true

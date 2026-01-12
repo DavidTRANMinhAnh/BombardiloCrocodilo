@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://bytyblppch5mk"]
+
+[ext_resource type="Script" uid="uid://d4knrwhdqoi01" path="res://explosion.gd" id="1_q7epf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q7epf"]
+albedo_color = Color(0.94509804, 0, 0.0627451, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7rj46"]
+material = SubResource("StandardMaterial3D_q7epf")
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q7epf"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Explosion" type="Area3D" parent="."]
+script = ExtResource("1_q7epf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Explosion"]
+mesh = SubResource("BoxMesh_7rj46")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Explosion"]
+shape = SubResource("BoxShape3D_q7epf")

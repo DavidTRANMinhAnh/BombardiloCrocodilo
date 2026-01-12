@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://tlwxkvj5hop3"]
+[gd_scene load_steps=9 format=3 uid="uid://tlwxkvj5hop3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r76ts"]
 albedo_color = Color(0.12728232, 0.033974376, 0.05486621, 1)
@@ -9,30 +9,45 @@ material = SubResource("StandardMaterial3D_r76ts")
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_r76ts"]
 points = PackedVector3Array(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8p2u3"]
-albedo_color = Color(0.64245343, 0.052334763, 0.17330563, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3oe6e"]
+albedo_color = Color(0.4859928, 0, 0.15992561, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_3oe6e"]
-material = SubResource("StandardMaterial3D_8p2u3")
+[sub_resource type="BoxMesh" id="BoxMesh_ph8b8"]
+material = SubResource("StandardMaterial3D_3oe6e")
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hch05"]
 points = PackedVector3Array(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch05"]
+albedo_color = Color(0.3849064, 0.19818774, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3oe6e"]
+material = SubResource("StandardMaterial3D_hch05")
+
 [node name="Node3D" type="Node3D"]
 
-[node name="MeshInstance3DSol" type="MeshInstance3D" parent="."]
+[node name="Sol" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_r76ts")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3DSol"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Sol"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3DSol/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sol/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_r76ts")
 
-[node name="MeshInstance3DMur" type="MeshInstance3D" parent="."]
+[node name="MurIndestructible" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ph8b8")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MurIndestructible"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MurIndestructible/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_hch05")
+
+[node name="MurDestructible" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_3oe6e")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3DMur"]
+[node name="StaticBody3D" type="StaticBody3D" parent="MurDestructible"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3DMur/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MurDestructible/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_hch05")

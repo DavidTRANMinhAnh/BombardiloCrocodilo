@@ -1,13 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://7eq8ohp0tfp2"]
+[gd_scene load_steps=5 format=3 uid="uid://7eq8ohp0tfp2"]
 
 [ext_resource type="Script" uid="uid://5xrkxyhc1v6q" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="PackedScene" uid="uid://choeruwxfrbf4" path="res://bomb.tscn" id="2_onrkg"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
+radius = 0.4
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
+radius = 0.4
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_4flbx")
+bomb_scene = ExtResource("2_onrkg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_sh265")
