@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c368hkuu3sos2"]
+[gd_scene load_steps=6 format=3 uid="uid://c368hkuu3sos2"]
 
 [ext_resource type="Script" uid="uid://dwqpq2wnbtjlm" path="res://hud.gd" id="1_37p78"]
 
@@ -6,6 +6,9 @@
 font_size = 40
 
 [sub_resource type="LabelSettings" id="LabelSettings_37p78"]
+font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_8sq4i"]
 font_size = 40
 
 [sub_resource type="LabelSettings" id="LabelSettings_64ctp"]
@@ -38,6 +41,15 @@ offset_bottom = 135.0
 text = "Vies : 3"
 label_settings = SubResource("LabelSettings_37p78")
 
+[node name="BombLabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 145.0
+offset_right = 251.0
+offset_bottom = 200.0
+text = "Bombes : 3"
+label_settings = SubResource("LabelSettings_8sq4i")
+
 [node name="GameOverPanel" type="Panel" parent="."]
 offset_right = 1152.0
 offset_bottom = 648.0
@@ -62,5 +74,32 @@ text = "Rejouer"
 layout_mode = 2
 text = "Retour au Menu"
 
+[node name="VictoryPanel" type="Panel" parent="."]
+visible = false
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VictoryPanel"]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+alignment = 1
+
+[node name="Label" type="Label" parent="VictoryPanel/VBoxContainer"]
+layout_mode = 2
+text = "VICTOIRE !"
+label_settings = SubResource("LabelSettings_64ctp")
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="VictoryPanel/VBoxContainer"]
+layout_mode = 2
+text = "Rejouer"
+
+[node name="MenuButton" type="Button" parent="VictoryPanel/VBoxContainer"]
+layout_mode = 2
+text = "Retour au Menu"
+
 [connection signal="pressed" from="GameOverPanel/VBoxContainer/RetryButton" to="." method="_on_retry_button_pressed"]
 [connection signal="pressed" from="GameOverPanel/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="VictoryPanel/VBoxContainer/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="VictoryPanel/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]

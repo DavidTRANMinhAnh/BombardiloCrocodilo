@@ -5,7 +5,9 @@ var lives : int = 3 # On commence avec 3 vies
 
 @onready var score_label = $Control/ScoreLabel
 @onready var lives_label = $Control/LivesLabel
+@onready var bomb_label = $Control/BombLabel
 @onready var game_over_panel = $GameOverPanel
+@onready var victory_panel = $VictoryPanel
 @onready var Retry_Button = $GameOverPanel/VBoxContainer/RetryButton
 @onready var Menu_Button = $GameOverPanel/VBoxContainer/MenuButton
 
@@ -20,6 +22,9 @@ func _ready():
 func add_score(points):
 	score += points
 	update_ui()
+	
+func update_bomb_count(amount):
+	bomb_label.text = "Bombes : " + str(amount)
 
 func remove_life():
 	lives -= 1
@@ -33,9 +38,10 @@ func update_ui():
 
 func game_over():
 	game_over_panel.show() # On affiche l'écran de fin
-	# On peut même mettre le jeu en pause si on veut
-	# get_tree().paused = true
-	
+
+func show_victory_screen():
+	victory_panel.show()
+
 func _on_retry_button_pressed():
 	# get_tree().paused = false
 	get_tree().reload_current_scene()

@@ -25,4 +25,4 @@ debug_shape_custom_color = Color(1, 0.17743215, 0.60208166, 1)
 debug_shape_thickness = 5
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0.81915206, -0.57357645, 0, 0.57357645, 0.81915206, 1, 3.5806274e-08, -2.5071824e-08, -7, 10, 0)
+transform = Transform3D(-4.371139e-08, 0.81915206, -0.5735764, 0, 0.5735764, 0.81915206, 1, 3.5806274e-08, -2.507182e-08, -7, 10, 0)

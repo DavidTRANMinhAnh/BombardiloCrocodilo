@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://tlwxkvj5hop3"]
+[gd_scene load_steps=11 format=3 uid="uid://tlwxkvj5hop3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r76ts"]
 albedo_color = Color(0.12728232, 0.033974376, 0.05486621, 1)
@@ -23,6 +23,11 @@ albedo_color = Color(0.3849064, 0.19818774, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3oe6e"]
 material = SubResource("StandardMaterial3D_hch05")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ph8b8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6ecdo"]
+material = SubResource("StandardMaterial3D_ph8b8")
 
 [node name="Node3D" type="Node3D"]
 
@@ -50,4 +55,13 @@ skeleton = NodePath("")
 [node name="StaticBody3D" type="StaticBody3D" parent="MurDestructible"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MurDestructible/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_hch05")
+
+[node name="MurBonus" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_6ecdo")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MurBonus"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MurBonus/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_hch05")

@@ -5,13 +5,21 @@ extends CharacterBody3D
 
 @export var bomb_scene : PackedScene # La scène bomb.tscn
 
+@export var bomb_stock : int = 3  # Le joueur commence avec 3 bombes
+@export var explosion_range : int = 2
+
 @onready var ray = $RayCast3D
 
 var is_moving = false
-var last_facing_dir = Vector3.RIGHT # Direction par défaut (correspond à "haut" dans ton code)
+var last_facing_dir = Vector3.RIGHT
+var can_check_victory = false
+var enemies_detected = false
+var portal_spawned = false
 
 func _ready():
 	snap_to_grid()
+	await get_tree().create_timer(1.0).timeout
+	can_check_victory = true
 
 func snap_to_grid():
 	var x = floor(global_position.x / tile_size) * tile_size + (tile_size / 2.0)
@@ -49,6 +57,11 @@ func attempt_move(direction: Vector3):
 		tween.finished.connect(func(): is_moving = false)
 		
 func drop_bomb():
+	
+	if bomb_stock <= 0:
+		print("Plus de munitions !")
+		return
+		
 	# 1. On oriente le RayCast vers la case devant pour vérifier s'il y a un mur
 	ray.target_position = last_facing_dir * tile_size
 	ray.force_raycast_update()
@@ -65,6 +78,14 @@ func drop_bomb():
 	var bomb = bomb_scene.instantiate()
 	get_parent().add_child(bomb)
 	
+	bomb.explosion_size = explosion_range
+	
+	bomb_stock -= 1
+	
+	var hud = get_tree().current_scene.find_child("HUD", true)
+	if hud:
+		hud.update_bomb_count(bomb_stock)
+		
 	# 5. Alignement de la bombe sur la case devant
 	var x = floor(target_bomb_pos.x / tile_size) * tile_size + (tile_size / 2.0)
 	var z = floor(target_bomb_pos.z / tile_size) * tile_size + (tile_size / 2.0)
@@ -73,6 +94,14 @@ func drop_bomb():
 func die():
 	print("Touché !")
 	
+	set_physics_process(false)
+	
+	var tween = create_tween()
+	tween.tween_property(self, "visible", false, 0.1)
+	tween.tween_property(self, "visible", true, 0.1)
+	tween.set_loops(5) # Clignote 5 fois
+	
+	await get_tree().create_timer(1.5).timeout # 1.5s d'invulnérabilité
 	# 1. On cherche le HUD pour enlever une vie
 	var hud = get_tree().current_scene.find_child("HUD", true)
 	if hud:
@@ -81,7 +110,7 @@ func die():
 		# 2. Si le joueur a encore des vies, on le remet au départ
 		if hud.lives > 0:
 			respawn()
-		# Si 0 vies, le HUD s'occupe déjà de reload_current_scene()
+			set_physics_process(true)
 
 func respawn():
 	# Petite animation de clignotement ou de reset
@@ -89,3 +118,42 @@ func respawn():
 	# Les coordonnées de la case de départ
 	global_position = Vector3(1.5, 2.0, 1.5) 
 	snap_to_grid()
+
+func _process(_delta):
+	if not can_check_victory:
+		return
+		
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	var count = enemies.size()
+
+	# Logique de détection
+	if count > 0 and not enemies_detected:
+		enemies_detected = true
+
+	# Condition de victoire
+	if enemies_detected and count == 0:
+		spawn_portal()
+
+func spawn_portal():
+	if portal_spawned: 
+		return
+	
+	portal_spawned = true
+	print("Victoire ! Le portail est activé.")
+	
+	var portal = get_tree().current_scene.find_child("Portal", true)
+	
+	if portal:
+		portal.show() # Il devient visible
+		# On change son mode pour qu'il commence à détecter les collisions
+		portal.process_mode = Node.PROCESS_MODE_INHERIT 
+	else:
+		# Si tu n'as pas de portail dans la scène, on affiche le HUD direct
+		var hud = get_tree().current_scene.find_child("HUD", true)
+		if hud:
+			hud.show_victory_screen()
+
+func update_hud_bombs():
+	var hud = get_tree().current_scene.find_child("HUD", true)
+	if hud:
+		hud.update_bomb_count(bomb_stock)

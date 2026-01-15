@@ -12,13 +12,11 @@ size = Vector3(0.8, 0.8, 0.8)
 [sub_resource type="BoxShape3D" id="BoxShape3D_q7epf"]
 size = Vector3(0.8, 0.8, 0.8)
 
-[node name="Node3D" type="Node3D"]
-
-[node name="Explosion" type="Area3D" parent="."]
+[node name="Explosion" type="Area3D"]
 script = ExtResource("1_q7epf")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Explosion"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_7rj46")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Explosion"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_q7epf")

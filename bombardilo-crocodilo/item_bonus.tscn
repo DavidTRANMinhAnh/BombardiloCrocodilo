@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlhsg7daul6ko"]
+
+[ext_resource type="Script" uid="uid://dkynyyt10sm0m" path="res://item_bonus.gd" id="1_m6xs5"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m6xs5"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_m6xs5"]
+height = 0.1
+
+[node name="ItemBonus" type="Area3D"]
+script = ExtResource("1_m6xs5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.05, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_m6xs5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_m6xs5")
