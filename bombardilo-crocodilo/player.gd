@@ -118,9 +118,14 @@ func respawn():
 	# Les coordonnées de la case de départ
 	global_position = Vector3(1.5, 2.0, 1.5) 
 	snap_to_grid()
+	
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	for enemy in enemies:
+		if enemy.has_method("reset_position"):
+			enemy.reset_position()
 
 func _process(_delta):
-	if not can_check_victory:
+	if not can_check_victory: 
 		return
 		
 	var enemies = get_tree().get_nodes_in_group("enemies")

@@ -7,11 +7,19 @@ extends CharacterBody3D
 
 var is_moving = false
 var target_player : Node3D = null
+var start_position : Vector3
 
 func _ready():
 	add_to_group("enemies")
 	# On récupère le joueur une seule fois au début
 	target_player = get_tree().get_first_node_in_group("player")
+	
+	start_position = global_position
+	
+	# Si on a trouvé le joueur, le RayCast ne doit plus le bloquer
+	if target_player:
+		ray.add_exception(target_player)
+	
 	# On aligne l'ennemi sur la grille (.5) dès le départ
 	snap_to_grid()
 
@@ -29,6 +37,15 @@ func _physics_process(_delta):
 	
 	if next_dir != Vector3.ZERO:
 		attempt_move(next_dir)
+		
+func _on_area_3d_body_entered(body):
+	# On vérifie si l'objet qui entre dans la zone est le joueur
+	if body.is_in_group("player"):
+		print("L'ennemi a touché le joueur !")
+		
+		# On appelle la fonction die() du joueur
+		if body.has_method("die"):
+			body.die()
 
 func calculate_chase_direction() -> Vector3:
 	if not target_player:
@@ -70,6 +87,12 @@ func move_to_tile(direction: Vector3):
 	var tween = create_tween()
 	tween.tween_property(self, "global_position", target_pos, speed)
 	tween.finished.connect(func(): is_moving = false)
+
+func reset_position():
+	is_moving = false
+	# On téléporte l'ennemi à sa position de départ
+	global_position = start_position
+	snap_to_grid()
 
 func die():
 	print("Ennemi éliminé !")
