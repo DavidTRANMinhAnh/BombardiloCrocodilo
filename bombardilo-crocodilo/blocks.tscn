@@ -1,67 +1,63 @@
-[gd_scene load_steps=11 format=3 uid="uid://tlwxkvj5hop3"]
+[gd_scene load_steps=9 format=3 uid="uid://tlwxkvj5hop3"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r76ts"]
-albedo_color = Color(0.12728232, 0.033974376, 0.05486621, 1)
+[ext_resource type="PackedScene" uid="uid://b40npcu0dlbuo" path="res://assets/Grass.gltf" id="1_hch05"]
+[ext_resource type="PackedScene" uid="uid://dn4dyc1etfk6w" path="res://assets/QuestionMark.gltf" id="2_3oe6e"]
+[ext_resource type="PackedScene" uid="uid://bu81ggru7pkkx" path="res://assets/Bricks_Red.gltf" id="2_6ecdo"]
+[ext_resource type="PackedScene" uid="uid://brugxab1mdrpu" path="res://assets/Block_Crate.gltf" id="2_ph8b8"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_r76ts"]
-material = SubResource("StandardMaterial3D_r76ts")
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6ecdo"]
+points = PackedVector3Array(-1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, -1, 1, -1)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_r76ts"]
-points = PackedVector3Array(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_lnrhk"]
+points = PackedVector3Array(-1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, -1, 1, -1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3oe6e"]
-albedo_color = Color(0.4859928, 0, 0.15992561, 1)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_0f68g"]
+points = PackedVector3Array(-1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, -1, 1, -1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ph8b8"]
-material = SubResource("StandardMaterial3D_3oe6e")
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hch05"]
-points = PackedVector3Array(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hch05"]
-albedo_color = Color(0.3849064, 0.19818774, 0, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_3oe6e"]
-material = SubResource("StandardMaterial3D_hch05")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ph8b8"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_6ecdo"]
-material = SubResource("StandardMaterial3D_ph8b8")
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_3tvjm"]
+points = PackedVector3Array(-1, -1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 1, -1, 1, -1)
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Sol" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_r76ts")
+[node name="Grass" parent="." instance=ExtResource("1_hch05")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Sol"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Grass/Grass" index="0"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Sol/StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_r76ts")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grass/Grass/StaticBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_6ecdo")
 
-[node name="MurIndestructible" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_ph8b8")
-skeleton = NodePath("")
+[node name="Brick" parent="." instance=ExtResource("2_6ecdo")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MurIndestructible"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Brick/Bricks_Red" index="0"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MurIndestructible/StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_hch05")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Brick/Bricks_Red/StaticBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_lnrhk")
 
-[node name="MurDestructible" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_3oe6e")
-skeleton = NodePath("")
+[node name="Crate" parent="." instance=ExtResource("2_ph8b8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MurDestructible"]
+[node name="Block_Crate" parent="Crate" index="0"]
+transform = Transform3D(-1, 0, 3.8941437e-07, 0, 1, 0, -3.8941437e-07, 0, -1, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MurDestructible/StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_hch05")
+[node name="StaticBody3D" type="StaticBody3D" parent="Crate/Block_Crate" index="0"]
 
-[node name="MurBonus" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_6ecdo")
-skeleton = NodePath("")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate/Block_Crate/StaticBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_0f68g")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MurBonus"]
+[node name="QuestionMark" parent="." instance=ExtResource("2_3oe6e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MurBonus/StaticBody3D"]
-shape = SubResource("ConvexPolygonShape3D_hch05")
+[node name="StaticBody3D" type="StaticBody3D" parent="QuestionMark/QuestionMark" index="0"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="QuestionMark/QuestionMark/StaticBody3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_3tvjm")
+
+[editable path="Grass"]
+[editable path="Brick"]
+[editable path="Crate"]
+[editable path="QuestionMark"]

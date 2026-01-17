@@ -7,6 +7,11 @@ func _ready():
 	# 1. On lance les particules
 	if has_node("GPUParticles3D"):
 		$GPUParticles3D.emitting = true
+		
+	# On récupère la caméra active et on lance le shake
+	var camera = get_viewport().get_camera_3d()
+	if camera and camera.has_method("apply_shake"):
+		camera.apply_shake(0.2) # 0.2 est l'intensité, tu peux tester 0.5 pour un gros boum !
 	
 	# 2. OPTIONNEL : Un flash de lumière rapide
 	var light = OmniLight3D.new()
