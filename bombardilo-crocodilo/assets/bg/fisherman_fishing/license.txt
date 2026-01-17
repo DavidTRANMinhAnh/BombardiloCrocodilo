@@ -1,0 +1,11 @@
+Model Information:
+* title:	Fisherman Fishing
+* source:	https://sketchfab.com/3d-models/fisherman-fishing-4ca43cc270fd42c78c9d0566dcb1a5f0
+* author:	volkanongun (https://sketchfab.com/volkanongun)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Fisherman Fishing" (https://sketchfab.com/3d-models/fisherman-fishing-4ca43cc270fd42c78c9d0566dcb1a5f0) by volkanongun (https://sketchfab.com/volkanongun) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
