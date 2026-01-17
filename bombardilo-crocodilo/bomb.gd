@@ -11,6 +11,12 @@ func _ready():
 	timer.start()
 	# On connecte le signal du Timer à notre fonction d'explosion
 	timer.timeout.connect(_on_explosion_timer_timeout)
+	
+	# On fait gonfler et dégonfler la bombe en boucle
+	var tween = create_tween().set_loops()
+	# Le nœud "Visual" est ton modèle 3D
+	tween.tween_property($Grenade, "scale", Vector3(1.2, 1.2, 1.2), 0.2).set_trans(Tween.TRANS_SINE)
+	tween.tween_property($Grenade, "scale", Vector3(1.0, 1.0, 1.0), 0.2).set_trans(Tween.TRANS_SINE)
 
 func _on_explosion_timer_timeout():
 	explode()

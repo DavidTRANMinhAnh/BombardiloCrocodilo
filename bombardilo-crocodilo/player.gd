@@ -10,6 +10,9 @@ extends CharacterBody3D
 
 @onready var ray = $RayCast3D
 
+@onready var anim_player = $Panda/AnimationPlayer
+@onready var model = $Panda
+
 var is_moving = false
 var last_facing_dir = Vector3.RIGHT
 var can_check_victory = false
@@ -28,7 +31,12 @@ func snap_to_grid():
 
 func _physics_process(_delta):
 	if is_moving:
+		if anim_player.current_animation != "Walk":
+			anim_player.play("Walk")
 		return
+	# Si on ne bouge pas et qu'on ne joue pas une animation spéciale (Sword/No)
+	if not anim_player.is_playing() or anim_player.current_animation == "Walk":
+		anim_player.play("Idle") # Ou le nom de ton animation de repos
 
 	var dir = Vector3.ZERO
 	# On garde ton mapping spécifique
@@ -49,17 +57,29 @@ func attempt_move(direction: Vector3):
 	ray.force_raycast_update()
 
 	if not ray.is_colliding():
+		# --- ROTATION FLUIDE ---
+		# On calcule l'angle de base. 
+		# Si le perso est encore à l'envers, on ajoutera le correctif ici.
+		var target_angle = atan2(direction.x, direction.z)
+		
+		var rot_tween = create_tween()
+		rot_tween.tween_property(model, "rotation:y", target_angle, 0.15)
+		# -----------------------
+
 		is_moving = true
 		var target_pos = global_position + (direction * tile_size)
 		
 		var tween = create_tween()
 		tween.tween_property(self, "global_position", target_pos, speed)
 		tween.finished.connect(func(): is_moving = false)
-		
+	else:
+		anim_player.play("No")
+
 func drop_bomb():
-	
 	if bomb_stock <= 0:
 		print("Plus de munitions !")
+		# MUR DÉTECTÉ : On joue l'animation "No"
+		anim_player.play("No")
 		return
 		
 	# 1. On oriente le RayCast vers la case devant pour vérifier s'il y a un mur
@@ -69,10 +89,15 @@ func drop_bomb():
 	# 2. Si le rayon touche quelque chose (un mur), on ne pose pas la bombe
 	if ray.is_colliding():
 		print("Action impossible : un obstacle bloque la pose de la bombe !")
+		# MUR DÉTECTÉ : On joue l'animation "No"
+		anim_player.play("No")
 		return
 
 	# 3. Calcul de la position de la case juste devant
 	var target_bomb_pos = global_position + (last_facing_dir * tile_size)
+	
+	# ON JOUE L'ANIMATION
+	anim_player.play("Sword")
 
 	# 4. Création de la bombe
 	var bomb = bomb_scene.instantiate()
@@ -93,24 +118,20 @@ func drop_bomb():
 
 func die():
 	print("Touché !")
-	
 	set_physics_process(false)
 	
-	var tween = create_tween()
-	tween.tween_property(self, "visible", false, 0.1)
-	tween.tween_property(self, "visible", true, 0.1)
-	tween.set_loops(5) # Clignote 5 fois
+	anim_player.play("Death")
 	
-	await get_tree().create_timer(1.5).timeout # 1.5s d'invulnérabilité
-	# 1. On cherche le HUD pour enlever une vie
+	# On attend la fin de l'animation ou un délai fixe
+	await get_tree().create_timer(1.5).timeout
+	
 	var hud = get_tree().current_scene.find_child("HUD", true)
 	if hud:
 		hud.remove_life()
-		
-		# 2. Si le joueur a encore des vies, on le remet au départ
 		if hud.lives > 0:
 			respawn()
 			set_physics_process(true)
+			anim_player.play("Idle")
 
 func respawn():
 	# Petite animation de clignotement ou de reset

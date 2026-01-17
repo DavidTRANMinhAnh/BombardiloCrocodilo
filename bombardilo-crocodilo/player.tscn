@@ -2,9 +2,7 @@
 
 [ext_resource type="Script" uid="uid://5xrkxyhc1v6q" path="res://player.gd" id="1_4flbx"]
 [ext_resource type="PackedScene" uid="uid://choeruwxfrbf4" path="res://bomb.tscn" id="2_onrkg"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_sh265"]
-radius = 0.4
+[ext_resource type="PackedScene" uid="uid://cugvuvrfvls2r" path="res://assets/Panda.gltf" id="3_i3pqv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
 radius = 0.4
@@ -13,8 +11,8 @@ radius = 0.4
 script = ExtResource("1_4flbx")
 bomb_scene = ExtResource("2_onrkg")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("CapsuleMesh_sh265")
+[node name="Panda" parent="." instance=ExtResource("3_i3pqv")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, -1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_4flbx")

@@ -4,9 +4,21 @@ extends Area3D
 const BRICK_ID = 2 
 
 func _ready():
-	# L'explosion disparaît après 0.5s
-	get_tree().create_timer(0.5).timeout.connect(queue_free)
-	# On connecte le signal de collision
+	# 1. On lance les particules
+	if has_node("GPUParticles3D"):
+		$GPUParticles3D.emitting = true
+	
+	# 2. OPTIONNEL : Un flash de lumière rapide
+	var light = OmniLight3D.new()
+	add_child(light)
+	light.light_color = Color.ORANGE
+	light.light_energy = 5.0
+	var lt = create_tween()
+	lt.tween_property(light, "light_energy", 0.0, 0.3) # La lumière disparaît vite
+	
+	# 3. L'explosion disparaît après 0.6s (un peu après les particules)
+	get_tree().create_timer(0.6).timeout.connect(queue_free)
+	
 	body_entered.connect(_on_body_entered)
 	
 	# On cherche le GridMap dans la scène Main

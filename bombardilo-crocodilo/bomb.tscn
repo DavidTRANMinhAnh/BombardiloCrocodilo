@@ -1,14 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://choeruwxfrbf4"]
+[gd_scene load_steps=6 format=3 uid="uid://choeruwxfrbf4"]
 
 [ext_resource type="Script" uid="uid://bva0qvims3ps4" path="res://bomb.gd" id="1_573fp"]
 [ext_resource type="PackedScene" uid="uid://bytyblppch5mk" path="res://explosion.tscn" id="2_4fn8o"]
 [ext_resource type="PackedScene" uid="uid://dlhsg7daul6ko" path="res://item_bonus.tscn" id="3_nfxiy"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j810f"]
-albedo_color = Color(0.5904814, 0.4044776, 0.13270754, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_j810f"]
-material = SubResource("StandardMaterial3D_j810f")
+[ext_resource type="PackedScene" uid="uid://cet6ksbs4a0r" path="res://assets/Grenade.gltf" id="4_6w74q"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_573fp"]
 
@@ -17,11 +12,10 @@ script = ExtResource("1_573fp")
 explosion_scene = ExtResource("2_4fn8o")
 bonus_scene = ExtResource("3_nfxiy")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_j810f")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_573fp")
 
 [node name="ExplosionTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Grenade" parent="." instance=ExtResource("4_6w74q")]

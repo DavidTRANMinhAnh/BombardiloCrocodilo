@@ -1,22 +1,42 @@
-[gd_scene load_steps=5 format=3 uid="uid://bytyblppch5mk"]
+[gd_scene load_steps=8 format=3 uid="uid://bytyblppch5mk"]
 
 [ext_resource type="Script" uid="uid://d4knrwhdqoi01" path="res://explosion.gd" id="1_q7epf"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q7epf"]
-albedo_color = Color(0.94509804, 0, 0.0627451, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_7rj46"]
-material = SubResource("StandardMaterial3D_q7epf")
-size = Vector3(0.8, 0.8, 0.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q7epf"]
 size = Vector3(0.8, 0.8, 0.8)
 
+[sub_resource type="Curve" id="Curve_q7epf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_vxas0"]
+curve = SubResource("Curve_q7epf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q7epf"]
+emission_shape = 3
+emission_box_extents = Vector3(0.3, 0.3, 0.3)
+spread = 180.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+scale_curve = SubResource("CurveTexture_vxas0")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxas0"]
+albedo_color = Color(0.9019608, 0.5803922, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_j4sxf"]
+material = SubResource("StandardMaterial3D_vxas0")
+
 [node name="Explosion" type="Area3D"]
 script = ExtResource("1_q7epf")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_7rj46")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_q7epf")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 30
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_q7epf")
+draw_pass_1 = SubResource("SphereMesh_j4sxf")
