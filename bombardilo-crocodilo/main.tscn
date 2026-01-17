@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://q18xf3w5fxgl"]
+[gd_scene load_steps=21 format=3 uid="uid://q18xf3w5fxgl"]
 
 [ext_resource type="MeshLibrary" uid="uid://damivmutr0rev" path="res://blocks.tres" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://7eq8ohp0tfp2" path="res://player.tscn" id="2_0xm2m"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://csx65hnl5ix1w" path="res://path_follow_3d.gd" id="11_dg77c"]
 [ext_resource type="PackedScene" uid="uid://8jx28tawqghe" path="res://assets/GermanShepherd.gltf" id="11_efxa6"]
 [ext_resource type="PackedScene" uid="uid://bel1xoc76xhi1" path="res://assets/bg/fisherman_fishing/scene.gltf" id="13_ycdy4"]
+[ext_resource type="Script" uid="uid://3dbqnj3505c1" path="res://assets/bg/fisherman_fishing/scene.gd" id="14_w48qg"]
 
 [sub_resource type="Curve3D" id="Curve3D_dg77c"]
 closed = true
@@ -268,4 +269,5 @@ transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 7, 15.5, 0.5, 10.5)
 mesh = SubResource("BoxMesh_dg77c")
 
 [node name="Fisherman" parent="Environment" instance=ExtResource("13_ycdy4")]
-transform = Transform3D(-0.007, 0, -6.119594e-10, 0, 0.007, 0, 6.119594e-10, 0, -0.007, 15.5, 1, 15)
+transform = Transform3D(-0.007, 0, -6.119594e-10, 0, 0.007, 0, 6.119594e-10, 0, -0.007, 15, 1, 15)
+script = ExtResource("14_w48qg")
