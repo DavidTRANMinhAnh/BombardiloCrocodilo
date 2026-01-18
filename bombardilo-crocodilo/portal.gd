@@ -5,8 +5,6 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body):
-	if body.is_in_group("player"):
-		print("Victoire !")
-		var hud = get_tree().current_scene.find_child("HUD", true)
-		if hud:
-			hud.show_victory_screen()
+	# On vérifie si c'est bien le joueur qui entre
+	if body.has_method("win"):
+		body.win() # On appelle la fonction win() du joueur

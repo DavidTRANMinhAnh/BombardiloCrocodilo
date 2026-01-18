@@ -20,8 +20,8 @@ script = ExtResource("1_37p78")
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1152.0
+offset_bottom = 648.0
 
 [node name="ScoreLabel" type="Label" parent="Control"]
 layout_mode = 0
@@ -49,6 +49,18 @@ offset_right = 251.0
 offset_bottom = 200.0
 text = "Bombes : 3"
 label_settings = SubResource("LabelSettings_8sq4i")
+
+[node name="RestartButton" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 51.0
+grow_horizontal = 0
+text = "Recommencer"
 
 [node name="GameOverPanel" type="Panel" parent="."]
 offset_right = 1152.0
@@ -91,6 +103,10 @@ text = "VICTOIRE !"
 label_settings = SubResource("LabelSettings_64ctp")
 horizontal_alignment = 1
 
+[node name="NextLevelButton" type="Button" parent="VictoryPanel/VBoxContainer"]
+layout_mode = 2
+text = "Niveau Suivant"
+
 [node name="RetryButton" type="Button" parent="VictoryPanel/VBoxContainer"]
 layout_mode = 2
 text = "Rejouer"
@@ -99,7 +115,9 @@ text = "Rejouer"
 layout_mode = 2
 text = "Retour au Menu"
 
+[connection signal="pressed" from="Control/RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="GameOverPanel/VBoxContainer/RetryButton" to="." method="_on_retry_button_pressed"]
 [connection signal="pressed" from="GameOverPanel/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="VictoryPanel/VBoxContainer/NextLevelButton" to="." method="_on_next_level_button_pressed"]
 [connection signal="pressed" from="VictoryPanel/VBoxContainer/RetryButton" to="." method="_on_retry_button_pressed"]
 [connection signal="pressed" from="VictoryPanel/VBoxContainer/MenuButton" to="." method="_on_menu_button_pressed"]

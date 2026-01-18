@@ -7,6 +7,12 @@ extends StaticBody3D
 var explosion_size : int = 2
 
 func _ready():
+	var fuse_player = AudioStreamPlayer.new()
+	add_child(fuse_player)
+	fuse_player.stream = load("res://assets/audio/fuse.wav")
+	fuse_player.volume_db = -15.0 # On le met un peu moins fort que l'explosion
+	fuse_player.play()
+	
 	# On lance le compte à rebours de 3 secondes dès que la bombe apparaît
 	timer.start()
 	# On connecte le signal du Timer à notre fonction d'explosion
@@ -22,6 +28,13 @@ func _on_explosion_timer_timeout():
 	explode()
 
 func explode():
+	var explosion = AudioStreamPlayer.new() 
+	get_parent().add_child(explosion)
+	explosion.stream = load("res://assets/audio/explosion.mp3")
+	explosion.volume_db = -20.0
+	explosion.play()
+	explosion.finished.connect(explosion.queue_free)
+	
 	# 1. Explosion centrale
 	spawn_explosion(global_position)
 	

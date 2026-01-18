@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @export var tile_size : float = 1.0  # Taille des cases
-@export var speed : float = 0.2     # Vitesse de déplacement
+@export var speed : float = 0.3     # Vitesse de déplacement
 
 @export var bomb_scene : PackedScene # La scène bomb.tscn
 
@@ -14,6 +14,7 @@ extends CharacterBody3D
 @onready var model = $Panda
 
 var is_moving = false
+var is_victorious = false
 var last_facing_dir = Vector3.RIGHT
 var can_check_victory = false
 var enemies_detected = false
@@ -30,25 +31,37 @@ func snap_to_grid():
 	global_position = Vector3(x, global_position.y, z)
 
 func _physics_process(_delta):
+	# 1. Si on est en train de glisser vers une case, on laisse l'animation "Walk" tourner
 	if is_moving:
 		if anim_player.current_animation != "Walk":
 			anim_player.play("Walk")
 		return
-	# Si on ne bouge pas et qu'on ne joue pas une animation spéciale (Sword/No)
-	if not anim_player.is_playing() or anim_player.current_animation == "Walk":
-		anim_player.play("Idle") # Ou le nom de ton animation de repos
 
+	# 2. On récupère la direction maintenue
 	var dir = Vector3.ZERO
-	# On garde ton mapping spécifique
-	if Input.is_action_just_pressed("haut"): dir = Vector3.RIGHT
-	elif Input.is_action_just_pressed("bas"): dir = Vector3.LEFT
-	elif Input.is_action_just_pressed("gauche"): dir = Vector3.FORWARD
-	elif Input.is_action_just_pressed("droite"): dir = Vector3.BACK
+	if Input.is_action_pressed("haut"): dir = Vector3.RIGHT
+	elif Input.is_action_pressed("bas"): dir = Vector3.LEFT
+	elif Input.is_action_pressed("gauche"): dir = Vector3.FORWARD
+	elif Input.is_action_pressed("droite"): dir = Vector3.BACK
 
+	# 3. GESTION DU MOUVEMENT ET DE L'ANIMATION
 	if dir != Vector3.ZERO:
-		last_facing_dir = dir # On enregistre vers où le joueur regarde
+		last_facing_dir = dir 
 		attempt_move(dir)
-	
+		
+		# On joue Walk SEULEMENT s'il n'est pas déjà en train de jouer
+		# C'est ça qui empêche le reset à chaque case !
+		if anim_player.current_animation != "Walk":
+			anim_player.play("Walk")
+	else:
+		# On ne joue Idle que si on ne bouge pas ET qu'on n'appuie sur rien
+		# On vérifie aussi qu'on ne coupe pas une animation spéciale (Sword, No, etc.)
+		var anim_speciales = ["Sword", "No", "Death", "Wave"]
+		if not anim_player.current_animation in anim_speciales:
+			if anim_player.current_animation != "Idle":
+				anim_player.play("Idle")
+
+	# 4. Pose de bombe
 	if Input.is_action_just_pressed("poser_bombe"):
 		drop_bomb()
 
@@ -114,18 +127,49 @@ func drop_bomb():
 	# 5. Alignement de la bombe sur la case devant
 	var x = floor(target_bomb_pos.x / tile_size) * tile_size + (tile_size / 2.0)
 	var z = floor(target_bomb_pos.z / tile_size) * tile_size + (tile_size / 2.0)
-	bomb.global_position = Vector3(x, 2, z)
+	bomb.global_position = Vector3(x, 1.5, z)
 
 func die():
 	print("Touché !")
-	set_physics_process(false)
-	
-	anim_player.play("Death")
-	
-	# On attend la fin de l'animation ou un délai fixe
-	await get_tree().create_timer(1.5).timeout
 	
 	var hud = get_tree().current_scene.find_child("HUD", true)
+	var camera = get_viewport().get_camera_3d()
+	
+	set_physics_process(false)
+	
+	var will_be_game_over = false
+	if hud and hud.lives - 1 <= 0:
+		will_be_game_over = true
+	
+	var death_sound = AudioStreamPlayer.new()
+	get_parent().add_child(death_sound)
+	
+	if will_be_game_over:
+		death_sound.stream = load("res://assets/audio/player_death.wav")
+		death_sound.volume_db = 0.0
+		anim_player.speed_scale = 0.3 
+		
+		if camera:
+			var tween_cam = create_tween().set_parallel(true)
+			tween_cam.tween_property(camera, "fov", 30.0, 1.5).set_trans(Tween.TRANS_SINE)
+			
+			var target_pos = global_position + Vector3(0, 1.0, 0)
+			var target_transform = camera.global_transform.looking_at(target_pos, Vector3.UP)
+			# Utilisation de la bonne fonction Godot 4 ici :
+			tween_cam.tween_property(camera, "quaternion", target_transform.basis.get_rotation_quaternion(), 1.5).set_trans(Tween.TRANS_SINE)
+	else:
+		death_sound.stream = load("res://assets/audio/fall.mp3")
+		death_sound.volume_db = -30.0
+		anim_player.speed_scale = 1.0
+
+	death_sound.play()
+	death_sound.finished.connect(death_sound.queue_free)
+
+	anim_player.play("Death")
+	
+	var wait_time = 1.5 if not will_be_game_over else 4.0
+	await get_tree().create_timer(wait_time).timeout
+	
 	if hud:
 		hud.remove_life()
 		if hud.lives > 0:
@@ -144,6 +188,36 @@ func respawn():
 	for enemy in enemies:
 		if enemy.has_method("reset_position"):
 			enemy.reset_position()
+
+func win():
+	if is_victorious: return 
+	
+	is_victorious = true
+	is_moving = false 
+	
+	# On coupe les contrôles
+	set_physics_process(false)
+	
+	# On calcule l'angle pour regarder vers -1 en X et 0 en Z
+	var target_angle = atan2(-1.0, 0.0) 
+	
+	var rot_tween = create_tween()
+	# On fait une rotation un peu plus lente (0.5s) pour que ce soit élégant
+	rot_tween.tween_property(model, "rotation:y", target_angle, 0.5).set_trans(Tween.TRANS_SINE)
+	
+	if anim_player.has_animation("Wave"):
+		# On récupère l'animation pour forcer la boucle par code
+		var wave_anim = anim_player.get_animation("Wave")
+		wave_anim.loop_mode = Animation.LOOP_LINEAR
+		
+		# On lance l'animation
+		anim_player.play("Wave")
+	
+	print("Le Panda vous salue pour la victoire !")
+	
+	var hud = get_tree().current_scene.find_child("HUD", true)
+	if hud:
+		hud.show_victory_screen()
 
 func _process(_delta):
 	if not can_check_victory: 
