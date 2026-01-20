@@ -7,6 +7,7 @@ extends StaticBody3D
 var explosion_size : int = 2
 
 func _ready():
+	add_to_group("bombs")
 	var fuse_player = AudioStreamPlayer.new()
 	add_child(fuse_player)
 	fuse_player.stream = load("res://assets/audio/fuse.wav")

@@ -15,6 +15,7 @@ extends CharacterBody3D
 
 var is_moving = false
 var is_victorious = false
+var is_dead = false
 var last_facing_dir = Vector3.RIGHT
 var can_check_victory = false
 var enemies_detected = false
@@ -91,7 +92,6 @@ func attempt_move(direction: Vector3):
 func drop_bomb():
 	if bomb_stock <= 0:
 		print("Plus de munitions !")
-		# MUR DÉTECTÉ : On joue l'animation "No"
 		anim_player.play("No")
 		return
 		
@@ -99,37 +99,47 @@ func drop_bomb():
 	ray.target_position = last_facing_dir * tile_size
 	ray.force_raycast_update()
 
-	# 2. Si le rayon touche quelque chose (un mur), on ne pose pas la bombe
 	if ray.is_colliding():
 		print("Action impossible : un obstacle bloque la pose de la bombe !")
-		# MUR DÉTECTÉ : On joue l'animation "No"
 		anim_player.play("No")
 		return
 
-	# 3. Calcul de la position de la case juste devant
+	# 2. Calcul de la position de la case juste devant (pour la vérification et le placement)
 	var target_bomb_pos = global_position + (last_facing_dir * tile_size)
-	
-	# ON JOUE L'ANIMATION
+	var x = floor(target_bomb_pos.x / tile_size) * tile_size + (tile_size / 2.0)
+	var z = floor(target_bomb_pos.z / tile_size) * tile_size + (tile_size / 2.0)
+	var final_pos = Vector3(x, 1.5, z)
+
+	# 3. VÉRIFICATION : Y a-t-il déjà une bombe ici ?
+	var existing_bombs = get_tree().get_nodes_in_group("bombs")
+	for b in existing_bombs:
+		# Si une bombe est à moins de 0.5 mètre de la position cible, on refuse
+		if b.global_position.distance_to(final_pos) < 0.5:
+			print("Une bombe est déjà présente sur cette case !")
+			anim_player.play("No")
+			return
+
+	# 4. Création de la bombe si la case est libre
 	anim_player.play("Sword")
 
-	# 4. Création de la bombe
 	var bomb = bomb_scene.instantiate()
 	get_parent().add_child(bomb)
 	
 	bomb.explosion_size = explosion_range
+	bomb.global_position = final_pos # On utilise la position calculée plus haut
 	
 	bomb_stock -= 1
 	
 	var hud = get_tree().current_scene.find_child("HUD", true)
 	if hud:
 		hud.update_bomb_count(bomb_stock)
-		
-	# 5. Alignement de la bombe sur la case devant
-	var x = floor(target_bomb_pos.x / tile_size) * tile_size + (tile_size / 2.0)
-	var z = floor(target_bomb_pos.z / tile_size) * tile_size + (tile_size / 2.0)
-	bomb.global_position = Vector3(x, 1.5, z)
 
 func die():
+	if is_dead: return 
+	is_dead = true
+	
+	collision_layer = 0
+	
 	print("Touché !")
 	
 	var hud = get_tree().current_scene.find_child("HUD", true)
@@ -179,10 +189,15 @@ func die():
 
 func respawn():
 	# Petite animation de clignotement ou de reset
+	is_dead = false
 	is_moving = false
+	collision_layer = 1
 	# Les coordonnées de la case de départ
 	global_position = Vector3(1.5, 2.0, 1.5) 
 	snap_to_grid()
+	
+	set_physics_process(true)
+	anim_player.play("Idle")
 	
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	for enemy in enemies:

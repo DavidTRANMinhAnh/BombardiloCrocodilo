@@ -88,11 +88,16 @@ func move_to_tile(direction: Vector3):
 	tween.finished.connect(func(): is_moving = false)
 
 func reset_position():
+	# On tue les tweens en cours pour éviter qu'il continue de glisser après le respawn
+	var active_tweens = get_tree().get_processed_tweens()
+	for t in active_tweens:
+		if t.is_valid(): t.kill()
+		
 	is_moving = false
 	is_dead = false
-	global_position = start_position
+	global_position = start_position # Capturee dans le _ready()
 	snap_to_grid()
-	anim_player.play("Idle")
+	if anim_player: anim_player.play("Idle")
 
 func die():
 	if is_dead: return # Éviter de mourir deux fois

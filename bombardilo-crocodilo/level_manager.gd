@@ -46,9 +46,8 @@ func load_level_json(num: int):
 		portal.hide() # On s'assure qu'il est invisible au début
 
 	# 4. Spawn des Ennemis
-	# NOTE : Supprime l'ennemi placé manuellement dans ton éditeur pour éviter les doublons
 	if enemy_scene and data.has("enemies_spawn"):
 		for e_pos in data["enemies_spawn"]:
 			var new_enemy = enemy_scene.instantiate()
+			new_enemy.position = Vector3(e_pos.x, 2.0, e_pos.z) 
 			add_child(new_enemy)
-			new_enemy.global_position = Vector3(e_pos.x, 2.0, e_pos.z)
