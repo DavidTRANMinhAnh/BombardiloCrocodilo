@@ -1,7 +1,8 @@
 extends StaticBody3D
 
 @onready var timer = $ExplosionTimer
-@export var explosion_scene : PackedScene # Glisse explosion.tscn ici
+const explosion_scene = preload("res://explosion.tscn")
+#@export var explosion_scene : PackedScene # Glisse explosion.tscn ici
 @export var bonus_scene : PackedScene # Glisse item_bonus.tscn ici
 
 var explosion_size : int = 2
