@@ -68,7 +68,7 @@ Projet réalisé en binôme :
 
 ## Galerie
 
-| Menu Principal | Gameplay Explosion |
+| Menu Principal | Gameplay |
 | :---: | :---: |
 | ![Menu](galerie/image_menu.png) | ![Gameplay](galerie/image_gameplay.png) |
 
