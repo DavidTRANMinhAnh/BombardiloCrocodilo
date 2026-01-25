@@ -62,7 +62,7 @@ Projet réalisé en binôme :
 | Membre | Rôle & Contributions | GitHub |
 | :--- | :--- | :---: |
 | **Achraf Ameri** | **Lead Gameplay & Core Mechanics**<br>Système de mouvement, Logique des bombes, Gestion des vies/Respawn, Optimisation Web. | [@AchrafAmeri](https://github.com/AchrafAmeri) |
-| **David Tran** | **IA & Level Design**<br>Intelligence artificielle des ennemis, Caméra dynamique, Système de Loot, Génération de niveau. | [@PseudoBinome](https://github.com/DavidTRANMinhAnh) |
+| **David Tran** | **IA & Level Design**<br>Intelligence artificielle des ennemis, Caméra dynamique, Système de Loot, Génération de niveau. | [@DavidTRANMinhAnh](https://github.com/DavidTRANMinhAnh) |
 
 ---
 
