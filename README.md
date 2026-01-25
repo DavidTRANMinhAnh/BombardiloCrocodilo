@@ -2,13 +2,15 @@
 
 # 🐊💣 Bombardilo Crocodilo
 
-![Godot Engine](https://img.shields.io/badge/Godot_4-478cbf?style=for-the-badge&logo=godot-engine&logoColor=white)
-![Language](https://img.shields.io/badge/GDScript-Top_Tier-green?style=for-the-badge)
-![Platform](https://img.shields.io/badge/Web_&_Desktop-Itch.io-fa5c5c?style=for-the-badge)
+[![Godot Engine](https://img.shields.io/badge/Godot_4-478cbf?style=for-the-badge&logo=godot-engine&logoColor=white)](https://godotengine.org/)
+
+[![Language](https://img.shields.io/badge/GDScript-Top_Tier-green?style=for-the-badge)](https://docs.godotengine.org/)
+
+[![Platform](https://img.shields.io/badge/Web_&_Desktop-Itch.io-fa5c5c?style=for-the-badge)](https://achrafameri.itch.io/bombardilocrocodilo)
 
 **Une aventure explosive en 3D où stratégie et réflexes sont vos meilleures armes.**
 
-[Jouer sur Itch.io](https://votre-pseudo.itch.io/bombardilo-crocodilo) • [Rapport de Bug](https://github.com/votre-username/votre-depot/issues)
+[Jouer sur Itch.io](https://achrafameri.itch.io/bombardilocrocodilo) • [Rapport de Bug](https://github.com/DavidTRANMinhAnh/BombardiloCrocodilo/issues)
 
 ---
 </div>
